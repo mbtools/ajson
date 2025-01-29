@@ -2538,6 +2538,7 @@ class ltcl_writer_test definition final
     methods ignore_empty for testing raising zcx_ajson_error.
     methods set_obj for testing raising zcx_ajson_error.
     methods set_obj_w_date_time for testing raising zcx_ajson_error.
+    methods set_obj_w_ref_to_data for testing raising zcx_ajson_error.
     methods set_tab for testing raising zcx_ajson_error.
     methods set_tab_hashed for testing raising zcx_ajson_error.
     methods set_tab_nested_struct for testing raising zcx_ajson_error.
@@ -2889,6 +2890,46 @@ class ltcl_writer_test implementation.
     li_writer->set(
       iv_path = '/'
       iv_val  = ls_struc ).
+    cl_abap_unit_assert=>assert_equals(
+      act = lo_cut->mt_json_tree
+      exp = lo_nodes->sorted( ) ).
+
+  endmethod.
+
+  method set_obj_w_ref_to_data.
+
+    data lo_nodes type ref to lcl_nodes_helper.
+    data lo_cut type ref to zcl_ajson.
+    data li_writer type ref to zif_ajson.
+
+    data:
+      begin of ls_ref,
+        a   type i value 1,
+        ref type ref to data,
+      end of ls_ref,
+      begin of ls_struc,
+        b type string value 'abc',
+        c type i value 10,
+        d type d value '20220401',
+      end of ls_struc.
+
+    lo_cut = zcl_ajson=>create_empty( ).
+    li_writer = lo_cut.
+
+    " Prepare source
+    create object lo_nodes.
+    lo_nodes->add( '        |      |object |           ||2' ).
+    lo_nodes->add( '/       |a     |num    |1          ||0' ).
+    lo_nodes->add( '/       |ref   |object |           ||3' ).
+    lo_nodes->add( '/ref/   |b     |str    |abc        ||0' ).
+    lo_nodes->add( '/ref/   |c     |num    |10         ||0' ).
+    lo_nodes->add( '/ref/   |d     |str    |2022-04-01 ||0' ).
+
+    get reference of ls_struc into ls_ref-ref.
+
+    li_writer->set(
+      iv_path = '/'
+      iv_val  = ls_ref ).
     cl_abap_unit_assert=>assert_equals(
       act = lo_cut->mt_json_tree
       exp = lo_nodes->sorted( ) ).
