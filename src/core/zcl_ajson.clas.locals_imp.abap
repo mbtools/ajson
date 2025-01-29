@@ -1615,6 +1615,8 @@ class lcl_abap_to_json implementation.
 
     data ls_node like line of ct_nodes.
 
+    field-symbols <lv_data> type any.
+
     ls_node-path  = is_prefix-path.
     ls_node-name  = is_prefix-name.
     ls_node-index = iv_index.
@@ -1633,12 +1635,20 @@ class lcl_abap_to_json implementation.
     if iv_data is initial.
       ls_node-type  = zif_ajson_types=>node_type-null.
       ls_node-value = 'null'.
+      append ls_node to ct_nodes.
     else.
-      " TODO support data references
-      zcx_ajson_error=>raise( |Unexpected reference @{ is_prefix-path && is_prefix-name }| ).
-    endif.
+      assign iv_data->* to <lv_data>.
 
-    append ls_node to ct_nodes.
+      convert_any(
+        exporting
+          iv_data       = <lv_data>
+          io_type       = cl_abap_typedescr=>describe_by_data( <lv_data> )
+          is_prefix     = is_prefix
+          iv_index      = iv_index
+          iv_item_order = iv_item_order
+        changing
+          ct_nodes      = ct_nodes ).
+    endif.
 
   endmethod.
 
