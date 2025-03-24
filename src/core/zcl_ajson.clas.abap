@@ -50,7 +50,7 @@ class zcl_ajson definition
 
     class-methods parse
       importing
-        !iv_json            type string
+        !iv_json            type any
         !iv_freeze          type abap_bool default abap_false
         !ii_custom_mapping  type ref to zif_ajson_mapping optional
         !iv_keep_item_order type abap_bool default abap_false
@@ -848,6 +848,8 @@ CLASS zcl_ajson IMPLEMENTATION.
     data lv_path_pattern    type string.
 
     create object lo_section.
+    lo_section->mi_custom_mapping = mi_custom_mapping.
+
     lv_normalized_path = lcl_utils=>normalize_path( iv_path ).
     lv_path_len        = strlen( lv_normalized_path ).
     ls_path_parts      = lcl_utils=>split_path( lv_normalized_path ).
