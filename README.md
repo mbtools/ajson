@@ -1,17 +1,17 @@
 <!-- markdownlint-disable first-line-heading -->
 ![abaplint](https://github.com/sbcgua/ajson/workflows/abaplint/badge.svg)
-![abap package version](https://img.shields.io/endpoint?url=https://shield.abap.space/version-shield-json/github/sbcgua/ajson/src/core/zif_ajson.intf.abap)
+![abap package version](https://img.shields.io/endpoint?url=https://abap-version-shield.sbcg.com.ua/version-shield-json/github/sbcgua/ajson/src/core/zif_ajson.intf.abap)
 
 # abap json (ajson)
 
 Yet another json parser/serializer for ABAP. It works with release 7.02 or higher.
 
-<!-- markdownlint-disable-next-line no-emphasis-as-header -->
+<!-- markdownlint-disable-next-line no-emphasis-as-heading -->
 **BREAKING CHANGES in v1.1**
 
 - `zif_ajson_reader` and `zif_ajson_writer` interface removed. Use `zif_ajson`. The last version with those interfaces is *v1.0.4*.
 
-<!-- markdownlint-disable-next-line no-emphasis-as-header -->
+<!-- markdownlint-disable-next-line no-emphasis-as-heading -->
 **DEPRECATION NOTES**
 
 - since v1.1.7
